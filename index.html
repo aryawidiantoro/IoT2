@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Blynk Sensor Kelembaban</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+        background-color: #f4f4f4; /* Warna latar belakang */
+        color: #333; /* Warna teks */
+      }
+      h1 {
+        color: #4caf50; /* Warna hijau untuk judul */
+      }
+      .sensor {
+        background-color: white; /* Warna latar belakang putih untuk setiap sensor */
+        border: 1px solid #ccc; /* Garis batas */
+        border-radius: 8px; /* Sudut melengkung */
+        padding: 20px;
+        margin: 10px;
+        display: inline-block; /* Menampilkan dalam baris */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+      }
+      .value {
+        font-size: 2em; /* Ukuran teks untuk nilai */
+        font-weight: bold; /* Teks tebal untuk nilai */
+        color: #4caf50; /* Warna hijau untuk nilai */
+      }
+      .footer {
+        margin-top: 20px;
+        font-size: 0.9em;
+        color: #666; /* Warna lebih ringan untuk footer */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Data Blynk Sensor Kelembaban</h1>
+    <div class="sensor" id="kelembaban1">Kelembaban 1: <span class="value">%</span></div>
+    <div class="sensor" id="kelembaban2">Kelembaban 2: <span class="value">%</span></div>
+    <div class="sensor" id="kelembaban3">Kelembaban 3: <span class="value">%</span></div>
+    <div class="sensor" id="kelembaban4">Kelembaban 4: <span class="value">%</span></div>
+    <div class="sensor" id="rata-rata">Rata-rata Kelembaban: <span class="value">%</span></div>
+
+    <div class="footer">Data diperbarui setiap 10 detik.</div>
+
+    <script>
+      const blynkToken = "duKOpwRdT2HL9F02YhfTLh2ENI8yS5rQ"; // Ganti dengan token Blynk Anda
+      const pins = [0, 1, 2, 3, 4]; // Virtual pins untuk kelembaban dan rata-rata
+
+      function fetchData(pin, elementId, label) {
+        const url = `https://blynk.cloud/external/api/get?token=${blynkToken}&pin=V${pin}`; // Perbaikan di sini
+        fetch(url)
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById(elementId).querySelector(".value").innerText = `${data}%`; // Menampilkan data di dalam span
+          })
+          .catch((error) => console.error("Error fetching data:", error));
+      }
+
+      function updateData() {
+        fetchData(pins[0], "kelembaban1", "Kelembaban 1");
+        fetchData(pins[1], "kelembaban2", "Kelembaban 2");
+        fetchData(pins[2], "kelembaban3", "Kelembaban 3");
+        fetchData(pins[3], "kelembaban4", "Kelembaban 4");
+        fetchData(pins[4], "rata-rata", "Rata-rata Kelembaban");
+      }
+
+      setInterval(updateData, 10000); // Ambil data setiap 10 detik
+      updateData(); // Ambil data saat halaman dimuat
+    </script>
+  </body>
+</html>
